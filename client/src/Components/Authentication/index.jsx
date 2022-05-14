@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   createUserWithEmailAndPassword, updateProfile, onAuthStateChanged,
   signOut, signInWithEmailAndPassword, useAuth,
 } from 'firebase/auth';
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from 'react-router-dom';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -21,6 +22,7 @@ function index() {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPW, setLoginPW] = useState('');
   const [error, setError] = useState('');
+  const authState = useAuthState(auth);
   // console.log('registerEmail', registerEmail, typeof(registerEmail));
   // console.log('registerPW', registerPW);
   // console.log('loginEmail', loginEmail);
@@ -29,11 +31,20 @@ function index() {
   // console.log('existing user', exisitingUser);
   // console.log(userName);
   // console.log('auth', auth);
+  console.log(authState, 'in index')
 
-  onAuthStateChanged(auth, (User) => {
-    // console.log('user changed in authentication', User);
-    setCurrentUser(User);
-  });
+  useEffect(() => {
+    if (authState[0]) {
+      setCurrentUser(auth.currentUser);
+      // console.log('login Button is working');
+      navigate('/');
+    }
+  }, [authState]);
+
+  // onAuthStateChanged(auth, (User) => {
+  //   // console.log('user changed in authentication', User);
+  //   setCurrentUser(User);
+  // });
 
   const register = async () => {
     try {
