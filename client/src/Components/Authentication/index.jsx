@@ -31,12 +31,10 @@ function index() {
   // console.log('existing user', exisitingUser);
   // console.log(userName);
   // console.log('auth', auth);
-  console.log(authState, 'in index')
 
   useEffect(() => {
     if (authState[0]) {
       setCurrentUser(auth.currentUser);
-      // console.log('login Button is working');
       navigate('/');
     }
   }, [authState]);
